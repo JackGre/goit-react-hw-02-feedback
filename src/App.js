@@ -1,25 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {Component} from "react";
+import CounterFeedback from "./CounterFeedback";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+
+class App extends Component {
+  state = {
+    good: 0,
+    neutral: 0,
+    bad: 0
+  }
+
+  handleClick = (key) => {
+    this.setState((state) => ({
+      [key]: state[key] + 1,
+    }));
+  };
+  
+  countTotalFeedback = () => {
+    return this.state.good + this.state.neutral + this.state.bad;
+  }
+  countPositiveFeedbackPercentage = (total) => {
+    return Math.round((Number(this.state.good) / Number(total)) * 100);
+  }
+  
+  
+  render() {
+    const { good, neutral, bad } = this.state;
+    const total = this.countTotalFeedback();
+    const percentage = this.countPositiveFeedbackPercentage(total);
+    const options = Object.keys(this.state);
+
+    return(
+      < CounterFeedback 
+        goodFeedback={good}
+        neutralFeedback={neutral}
+        badFeedback={bad}
+        total={total}
+        percentage={percentage}
+        hendleClick={this.handleClick}
+        options={options} 
+      />
+    );
+  }
 }
 
 export default App;
